@@ -15,6 +15,12 @@ public class DemoApplication {
     @Value("${profile.name}")
     String activeprofilename;
 
+    @Value("${spring.config.import}")
+    String configStoreLoc;
+
+    @Value("${keystore.repo.name}")
+    String configStoreName;
+
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
         //new SpringApplicationBuilder().profiles(args[0]).sources().run(args);
@@ -28,6 +34,16 @@ public class DemoApplication {
     @RequestMapping("/getprofilename")
     public String getActiveProfileName(){
         return activeprofilename;
+    }
+
+    @RequestMapping("/getconfigrepolocation")
+    public String getConfigRepoLoc(){
+        return configStoreLoc;
+    }
+
+    @RequestMapping("/getconfigstorename")
+    public String getconfigStoreName(){
+        return configStoreName;
     }
 
 }

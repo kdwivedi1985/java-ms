@@ -37,6 +37,7 @@ Activate profiles at runtime-
 
 
 
+GET- http://localhost:8080/getprofilename
 
 
 
