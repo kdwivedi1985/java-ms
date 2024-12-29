@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msdemo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+      department: configuration
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo
+        department: configuration
+    spec:
+      containers:
+        - name: myfirstdemo
+          image: "kdwivedi1985/myfirstdemo:build1223"
