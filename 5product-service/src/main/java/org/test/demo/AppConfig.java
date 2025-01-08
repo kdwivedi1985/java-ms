@@ -24,6 +24,12 @@ public class AppConfig {
     //@Value("${gateway-server.portnumber}")
     //String gateway_portnumber;
 
+    @Value("${gateway-server.hostname}")
+    String gateway_hostname;
+
+    @Value("${gateway-server.port}")
+    String gateway_port;
+
     @Autowired
     private EurekaDiscoveryClient discoveryClient;
 
@@ -36,11 +42,36 @@ public class AppConfig {
                 .build();
     }
 
+    //Connected through API Gateway
+
     @Bean
     public WebClient webClient_2(WebClient.Builder webClientBuilder)
     {
-        return webClientBuilder
+       /* return webClientBuilder
                 .baseUrl("http://localhost:8091/api/v1/gethealthstatus")
+                .filter(new LoggingWebClientFilter())
+                .build();*/
+
+        /*Read host and port from API Gateway and give name of the microservice so it recognizes the name of the service
+        we want to hit . e.g. 4price-service.
+        config repo must have either yml or properties file name e.g. product-service.yml
+         */
+        return webClientBuilder
+                .baseUrl("http://"+gateway_hostname+ ":"+gateway_port+"/price-service/api/v1/gethealthstatus")
+                .filter(new LoggingWebClientFilter())
+                .build();
+    }
+
+    //Connecting through Eureka Service Discovery
+    @Bean
+    public WebClient webClient_3(WebClient.Builder webClientBuilder)
+    {
+        ServiceInstance instance = getServiceInstance("price-service");
+        String hostname = instance.getHost();
+        int port = instance.getPort();
+
+        return webClientBuilder
+                .baseUrl("http://"+hostname+":"+port+"/api/v1/getprice") //GET_RATION_DETAILS -> FETCH THE URI FROM HATEOS RESPONSE
                 .filter(new LoggingWebClientFilter())
                 .build();
     }
@@ -86,7 +117,7 @@ public class AppConfig {
                 .build();
 
     }
-
+ */
     @Retryable(
             value = {RuntimeException.class}, // specify the exception types to retry on
             maxAttempts = 5,
@@ -104,5 +135,5 @@ public class AppConfig {
         }
         return instances.get(0);
     }
-*/
+
 }

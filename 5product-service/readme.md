@@ -4,9 +4,10 @@
 4. running server from project has issue, create jar using <mvn clean package> 
 5. deploy the jar using java -jar <jar name>
 
-*** This service is not working***
+In AppConfig.java- Read host and port from API Gateway and give name of the microservice so it recognizes the name of the service
+we want to hit . e.g. 4price-service.
+config repo must have either yml or properties file name e.g. product-service.yml
 
-copy code from "social-service"
 
 This service will be invoked by client and will call price-service
 Port is 8091
@@ -16,10 +17,17 @@ Port is 8091
 Mono-> single stream 
 Flux-> Stream of Data
 
-1. Hit http://localhost:8090/productservice/api/v1/async-pricehealth,
+1. Hit http://localhost:8090/api/v1/async-pricehealth,
     it will return "price_status_cookie" and value in response
 2. Make a subsequent request by adding "price_status_cookie" and it's value in header
 
+3. If API Gateway is setup - we can also hit- http://localhost:8072/product-service/api/v1/async-pricehealth
+    It means now all requests can be routed through API-Gateway. You don't need to hit separate host-port for each
+    e.g. http://localhost:8072/price-service/api/v1/getprice
+
+http://localhost:8072/product-service/api/v1/async-getprice
+
+http://localhost:8090/api/v1/async-getprice
 
 
 

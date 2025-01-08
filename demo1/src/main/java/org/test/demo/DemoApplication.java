@@ -18,4 +18,9 @@ public class DemoApplication {
     public String sayHello(@RequestParam(value = "myName", defaultValue = "World") String name) {
         return String.format("Hello %s!", name);
     }
+
+    @RequestMapping("/hello-test")
+    public String test_Hello(@RequestParam(value = "myName", defaultValue = "World") String name) {
+        return String.format("Hello %s!", name);
+    }
 }

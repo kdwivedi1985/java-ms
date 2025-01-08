@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.test</groupId>
-    <artifactId>5product-service</artifactId>
+    <artifactId>product-service</artifactId>
     <version>1.0</version>
     <name>phoenix</name>
     <description>Profile Configurations</description>

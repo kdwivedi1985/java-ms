@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Tag(name = "Product Service", description = "Product Service APIs")
 @RestController
-@RequestMapping("/productservice/api/v1")
+@RequestMapping("/api/v1")
 public class MainRestController {
 
     @Autowired
@@ -33,9 +33,9 @@ public class MainRestController {
     @Qualifier("webClient_2")
     WebClient webClient_2;
 
-   /* @Autowired
+   @Autowired
     @Qualifier("webClient_3")
-    WebClient webClient_obs;*/
+    WebClient webClient_3;
 
     //@Autowired
     //CredentialRepository credentialRepository;
@@ -80,6 +80,49 @@ public class MainRestController {
         else
         {
             String cookie = request.getHeader("price_status_cookie");
+            String response = (String) redisTemplate.opsForValue().get(cookie);
+            return ResponseEntity.ok().body(response);
+        }
+
+    }
+
+    @GetMapping("/async-getprice")
+    public ResponseEntity<String> getPrice(HttpServletRequest request)
+    {
+        log.info("Method Accessed!!");
+
+        Optional<String> priceHealthStatusCookie = Optional.ofNullable(request.getHeader("price_cookie"));
+        log.info("Cookie Value::"+ priceHealthStatusCookie);
+
+        if(priceHealthStatusCookie.isEmpty())
+        {
+            // ASYNC REQUEST TO Price-SERVICE
+            //Mono support Synch and Aync both. use for single.
+            //Flux is used for stream of events
+
+            Mono<String> responseMono = webClient_3.get()
+                    .retrieve()
+                    .bodyToMono(String.class); // ASYNCHRONOUS
+
+            final String[] finalResponse = {null};
+            String cookie =  String.valueOf((int)(Math.random()*1000000));
+
+            responseMono.subscribe(
+                    response1 -> {
+                        log.info(response1+" from the price service");
+                        finalResponse[0] = response1;
+                        redisTemplate.opsForValue().set(cookie, response1);
+                    },
+                    error1 ->
+                    {
+                        log.info("error processing the response "+error1);
+                    });
+
+            return  ResponseEntity.ok().header("price_cookie", cookie).body("Status Request Initiated");
+        }
+        else
+        {
+            String cookie = request.getHeader("price_cookie");
             String response = (String) redisTemplate.opsForValue().get(cookie);
             return ResponseEntity.ok().body(response);
         }

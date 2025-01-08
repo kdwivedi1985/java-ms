@@ -33,6 +33,7 @@ zipkin:
 
 server:
   port: 8888
+  #port:8899
 
 management:
   endpoints:
