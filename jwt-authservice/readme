@@ -1,0 +1,10 @@
+Any request except ("/auth/**, "/find/**") is not allowed without token, check SecurityConfiguration
+
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/auth/**")
+
+
+-> Add "/swagger-ui/**","/v3/api-docs/**" in securityfilter to by pass authentication for swagger

@@ -17,12 +17,14 @@ public class Customer {
     private Integer id;
     @Column(name = "name", length = 100)
     private String name;
-    @Column(name = "email", length = 30)
+    @Column(name = "email", length = 30, unique = true)
     private String email;
     @Column(name = "phone", length = 10)
     private String phone;
     @Column(name = "address", length = 150)
     private String address;
+    @Column(name = "password", length = 150)
+    private String password;
 
     public Integer getId() {
         return id;
@@ -62,5 +64,13 @@ public class Customer {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
